@@ -24,7 +24,7 @@ jobs:
         run: |
           echo "Running Bandit security scan..."
           bandit -r . --format txt
-          echo "✅ Bandit scan completed"
+          echo "OK: Bandit scan completed"
       
       - name: Security Gate - Check for debug=True
         id: security-gate
@@ -33,26 +33,24 @@ jobs:
           
           VIOLATIONS=0
           
-          # Поиск debug=True в Python файлах
           if grep -r "\.debug\s*=\s*True" . --include="*.py"; then
-            echo "❌ CRITICAL: Found .debug = True"
+            echo "ERROR: Found .debug = True"
             VIOLATIONS=1
           fi
           
           if grep -r "\.run.*debug\s*=\s*True" . --include="*.py"; then
-            echo "❌ CRITICAL: Found Flask debug mode"
+            echo "ERROR: Found Flask debug mode"
             VIOLATIONS=1
           fi
           
-          # Если найдены нарушения - блокируем
           if [ $VIOLATIONS -gt 0 ]; then
             echo "::error::Found $VIOLATIONS critical security violations"
-            echo "🚫 MERGE BLOCKED - Security violations detected"
+            echo "MERGE BLOCKED - Security violations detected"
             exit 1
           else
-            echo "✅ Security gate passed - No critical violations found"
+            echo "OK: Security gate passed - No critical violations found"
           fi
       
       - name: Success
         if: success()
-        run: echo "🎉 All security checks passed!"
+        run: echo "All security checks passed!"
