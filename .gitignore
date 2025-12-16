@@ -56,4 +56,6 @@ notes_app/.pytest_cache/
 notes_app/.coverage
 
 # Bandit configuration file
-.bandit
+
+# Archive from PR3
+notes_app/
