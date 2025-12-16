@@ -25,5 +25,5 @@ def unsafe_query(user_input):
 
 if __name__ == '__main__':
     # ⚠️ УЯЗВИМОСТЬ 4: Запуск с debug
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000)
     print("❌ Этот код не должен пройти проверки безопасности!")
