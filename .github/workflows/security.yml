@@ -1,1 +1,57 @@
-[ВСТАВЬТЕ ВЕСЬ ТЕКСТ ВЫШЕ ОТ name: ДО КОНЦА]
+name: Security Pipeline - NotesApp
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  security-checks:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      
+      - name: Install security tools
+        run: pip install bandit
+      
+      - name: Run Bandit SAST scan
+        run: |
+          echo "Running Bandit security scan..."
+          bandit -r . --format txt
+          echo "OK: Bandit scan completed"
+      
+      - name: Security Gate - Check for debug=True
+        id: security-gate
+        run: |
+          echo "Checking for security violations..."
+          
+          VIOLATIONS=0
+          
+          if grep -r "\.debug\s*=\s*True" . --include="*.py"; then
+            echo "ERROR: Found .debug = True"
+            VIOLATIONS=1
+          fi
+          
+          if grep -r "\.run.*debug\s*=\s*True" . --include="*.py"; then
+            echo "ERROR: Found Flask debug mode"
+            VIOLATIONS=1
+          fi
+          
+          if [ $VIOLATIONS -gt 0 ]; then
+            echo "::error::Found $VIOLATIONS critical security violations"
+            echo "MERGE BLOCKED - Security violations detected"
+            exit 1
+          else
+            echo "OK: Security gate passed - No critical violations found"
+          fi
+      
+      - name: Success
+        if: success()
+        run: echo "All security checks passed!"
