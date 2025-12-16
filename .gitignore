@@ -42,3 +42,18 @@ Thumbs.db
 
 # GitHub Actions
 !.github/workflows/security.yml
+
+# ============================================
+# Rules for nested project directory notes_app/
+# ============================================
+notes_app/.env
+notes_app/__pycache__/
+notes_app/instance/
+notes_app/venv/
+notes_app/*.db
+notes_app/*.sqlite
+notes_app/.pytest_cache/
+notes_app/.coverage
+
+# Bandit configuration file
+.bandit
