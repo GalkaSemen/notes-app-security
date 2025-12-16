@@ -1,0 +1,17 @@
+2025-12-14 03:09:36 - flask_app - INFO - [IP:127.0.0.1] [USER:anonymous] - ENDPOINT: /login | METHOD: GET | USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Sa
+2025-12-14 03:30:12 - flask_app - INFO - [IP:127.0.0.1] [USER:anonymous] - ENDPOINT: /login_secure | METHOD: POST | USER_AGENT: curl/8.5.0
+2025-12-14 03:30:12 - flask_app - WARNING - [IP:127.0.0.1] [USER:anonymous] - AUTH_ATTEMPT: /login_secure | DATA: {'username': 'testuser', 'password': '***'}
+2025-12-14 03:30:12 - flask_app - INFO - [IP:127.0.0.1] [USER:anonymous] - ENDPOINT: /login_secure | METHOD: POST | USER_AGENT: curl/8.5.0
+2025-12-14 03:30:12 - flask_app - WARNING - [IP:127.0.0.1] [USER:anonymous] - AUTH_ATTEMPT: /login_secure | DATA: {'username': 'testuser', 'password': '***'}
+2025-12-14 03:30:13 - flask_app - INFO - [IP:127.0.0.1] [USER:anonymous] - ENDPOINT: /login_secure | METHOD: POST | USER_AGENT: curl/8.5.0
+2025-12-14 03:30:13 - flask_app - WARNING - [IP:127.0.0.1] [USER:anonymous] - AUTH_ATTEMPT: /login_secure | DATA: {'username': 'testuser', 'password': '***'}
+2025-12-14 03:30:13 - flask_app - INFO - [IP:127.0.0.1] [USER:anonymous] - ENDPOINT: /login_secure | METHOD: POST | USER_AGENT: curl/8.5.0
+2025-12-14 03:30:13 - flask_app - WARNING - [IP:127.0.0.1] [USER:anonymous] - AUTH_ATTEMPT: /login_secure | DATA: {'username': 'testuser', 'password': '***'}
+2025-12-14 03:30:14 - flask_app - INFO - [IP:127.0.0.1] [USER:anonymous] - ENDPOINT: /login_secure | METHOD: POST | USER_AGENT: curl/8.5.0
+2025-12-14 03:30:14 - flask_app - WARNING - [IP:127.0.0.1] [USER:anonymous] - AUTH_ATTEMPT: /login_secure | DATA: {'username': 'testuser', 'password': '***'}
+2025-12-14 03:30:14 - flask_app - INFO - [IP:127.0.0.1] [USER:anonymous] - ENDPOINT: /login_secure | METHOD: POST | USER_AGENT: curl/8.5.0
+2025-12-14 03:30:14 - flask_app - WARNING - [IP:127.0.0.1] [USER:anonymous] - AUTH_ATTEMPT: /login_secure | DATA: {'username': 'testuser', 'password': '***'}
+2025-12-14 03:30:15 - flask_app - INFO - [IP:127.0.0.1] [USER:anonymous] - ENDPOINT: /login_vulnerable | METHOD: POST | USER_AGENT: curl/8.5.0
+2025-12-14 03:30:15 - flask_app - WARNING - [IP:127.0.0.1] [USER:anonymous] - AUTH_ATTEMPT: /login_vulnerable | DATA: {'username': 'testuser', 'password': '***'}
+2025-12-16 07:19:24 - flask_app - INFO - [IP:127.0.0.1] [USER:anonymous] - ENDPOINT: /demo/vulnerable | METHOD: GET | USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Sa
+2025-12-16 07:19:32 - flask_app - INFO - [IP:127.0.0.1] [USER:anonymous] - ENDPOINT: /login | METHOD: GET | USER_AGENT: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Sa

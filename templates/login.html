@@ -1,0 +1,39 @@
+{% extends "base_auth.html" %}
+
+{% block title %}Вход в систему{% endblock %}
+
+{% block page_title %}Вход в систему{% endblock %}
+{% block page_subtitle %}Введите свои учетные данные{% endblock %}
+
+{% block content %}
+    <form method="POST" action="{{ url_for('login_secure') }}">
+        {{ form.csrf_token }}
+        
+        <div class="form-group">
+            {{ form.username.label }}
+            {{ form.username(placeholder="Введите имя пользователя", class="form-control") }}
+            {% if form.username.errors %}
+                <div class="error-message">{{ form.username.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password(placeholder="Введите пароль", class="form-control") }}
+            {% if form.password.errors %}
+                <div class="error-message">{{ form.password.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        {{ form.submit(class="btn") }}
+    </form>
+    
+    <a href="{{ url_for('demo_vulnerable') }}" class="demo-link">
+        🧪 Демонстрация SQL-инъекции (уязвимая версия)
+    </a>
+{% endblock %}
+
+{% block form_footer %}
+    <p>Нет аккаунта? <a href="{{ url_for('register_page') }}">Зарегистрируйтесь</a></p>
+    <p><a href="{{ url_for('index') }}">← Вернуться к заметкам</a></p>
+{% endblock %}

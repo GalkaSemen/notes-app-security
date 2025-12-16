@@ -1,0 +1,110 @@
+name: Security Pipeline - NotesApp
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  security-checks:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 1. Получение кода
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    # 2. Настройка Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+        
+    # 3. Установка инструментов безопасности
+    - name: Install security tools
+      run: |
+        pip install bandit safety
+        
+    # 4. Запуск Bandit (SAST)
+    - name: Run Bandit SAST scan
+      id: bandit
+      run: |
+        echo "🚀 Running Bandit security scan..."
+        bandit -r . \
+          -f json \
+          -o bandit_report.json \
+          --exit-zero
+        
+        # Анализ результатов
+        if python -c "
+import json
+with open('bandit_report.json') as f:
+    data = json.load(f)
+high = [i for i in data['results'] if i['issue_severity'] == 'HIGH']
+if high:
+    print(f'❌ Found {len(high)} HIGH severity vulnerabilities!')
+    print('::error::High severity vulnerabilities found. Blocking merge.')
+    exit(1)
+else:
+    print('✅ No HIGH severity vulnerabilities found.')
+        "; then
+          echo "Bandit check passed"
+        else
+          exit 1
+        fi
+        
+    # 5. Проверка зависимостей
+    - name: Check dependencies with safety
+      run: |
+        echo "📦 Checking dependencies for vulnerabilities..."
+        if [ -f requirements.txt ]; then
+          safety check -r requirements.txt || echo "Warning: safety check failed"
+        else
+          echo "No requirements.txt found"
+        fi
+        
+    # 6. Security Gate - проверка опасных паттернов
+    - name: Security Gate - Block dangerous code
+      id: security-gate
+      run: |
+        echo "🚧 Checking for security violations..."
+        
+        # Паттерны, которые БЛОКИРУЮТ мерж
+        VIOLATIONS=0
+        
+        # 1. Debug mode в production
+        if grep -r "\.debug\s*=\s*True" . --include="*.py" --exclude-dir=.github; then
+          echo "❌ CRITICAL: Found .debug = True"
+          VIOLATIONS=$((VIOLATIONS + 1))
+        fi
+        
+        # 2. Flask app.run(debug=True)
+        if grep -r "\.run.*debug\s*=\s*True" . --include="*.py" --exclude-dir=.github; then
+          echo "❌ CRITICAL: Found Flask debug mode"
+          VIOLATIONS=$((VIOLATIONS + 1))
+        fi
+        
+        # 3. Hardcoded secrets (предупреждение)
+        echo "🔍 Checking for hardcoded secrets..."
+        grep -r "SECRET_KEY\s*=\s*['\"].*['\"]" . --include="*.py" || true
+        grep -r "password\s*=\s*['\"].*['\"]" . --include="*.py" || true
+        
+        # Финальная проверка
+        if [ $VIOLATIONS -gt 0 ]; then
+          echo "::error::Found $VIOLATIONS critical security violations"
+          echo "🚫 MERGE BLOCKED - Security violations detected"
+          exit 1
+        else
+          echo "✅ Security gate passed - No critical violations found"
+        fi
+        
+    # 7. Уведомление об успехе
+    - name: Success notification
+      if: success()
+      run: |
+        echo "🎉 All security checks passed!"
+        echo "✅ SAST: Passed"
+        echo "✅ Dependencies: Checked"
+        echo "✅ Security gate: Passed"
+        echo "✅ Ready for merge"
